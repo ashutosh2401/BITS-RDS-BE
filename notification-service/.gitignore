@@ -31,3 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
+
+notification-service/src/main/resources/application.properties
