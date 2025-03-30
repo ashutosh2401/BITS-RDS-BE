@@ -1,4 +1,4 @@
-package com.resume.userservice.dto;
+package com.resume.userservice.user.dto;
 
 import lombok.*;
 

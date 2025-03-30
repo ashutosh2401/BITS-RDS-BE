@@ -1,11 +1,11 @@
-package com.resume.userservice.service;
+package com.resume.userservice.user.service;
 
-import com.resume.userservice.dto.LoginRequest;
-import com.resume.userservice.dto.LoginResponse;
-import com.resume.userservice.dto.RegisterRequest;
-import com.resume.userservice.dto.RegisterResponse;
-import com.resume.userservice.entity.User;
-import com.resume.userservice.repository.UserRepository;
+import com.resume.userservice.user.dto.LoginRequest;
+import com.resume.userservice.user.dto.LoginResponse;
+import com.resume.userservice.user.dto.RegisterRequest;
+import com.resume.userservice.user.dto.RegisterResponse;
+import com.resume.userservice.user.entity.User;
+import com.resume.userservice.user.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

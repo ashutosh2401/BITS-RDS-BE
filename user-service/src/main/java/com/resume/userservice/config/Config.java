@@ -1,6 +1,6 @@
 package com.resume.userservice.config;
 
-import com.resume.userservice.mapper.UserMapper;
+import com.resume.userservice.user.mapper.UserMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
