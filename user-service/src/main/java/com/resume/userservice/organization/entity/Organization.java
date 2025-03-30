@@ -18,6 +18,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 public class Organization {
     @Id
     private String id;
+    private String orgId;
     private String name;
 
     @DBRef

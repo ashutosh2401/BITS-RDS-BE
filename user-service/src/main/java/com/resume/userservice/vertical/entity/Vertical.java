@@ -19,6 +19,7 @@ import java.util.List;
 public class Vertical {
     @Id
     private String id;
+    private String verticalId;
     private String name;
 
     @DBRef
