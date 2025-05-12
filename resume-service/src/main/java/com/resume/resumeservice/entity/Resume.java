@@ -14,10 +14,8 @@ public class Resume {
     @Id
     private String id;
     private String employeeId;
-    private String name;
-    private String email;
-    private String phone;
-    private List<String> skills;
-    private List<String> experiences;
-    private List<String> education;
+    private String companyId;
+    private String verticalId;
+    private String title;
+    private List<ResumeVersion> versions;
 }
