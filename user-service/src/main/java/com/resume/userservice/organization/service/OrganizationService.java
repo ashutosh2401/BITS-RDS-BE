@@ -1,7 +1,9 @@
 package com.resume.userservice.organization.service;
 
-import org.springframework.stereotype.Service;
+import com.resume.userservice.organization.response.OrganizationResponse;
 
-@Service
-public class OrganizationService {
+import java.util.List;
+
+public interface OrganizationService {
+    List<OrganizationResponse> getAllOrganizations();
 }

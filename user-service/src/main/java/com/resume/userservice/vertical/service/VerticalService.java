@@ -1,7 +1,9 @@
 package com.resume.userservice.vertical.service;
 
-import org.springframework.stereotype.Service;
+import com.resume.userservice.vertical.response.VerticalResponse;
 
-@Service
-public class VerticalService {
+import java.util.List;
+
+public interface VerticalService {
+    List<VerticalResponse> getVerticalsByOrgId(String orgId);
 }

@@ -1,4 +1,4 @@
-package com.resume.userservice.user.dto;
+package com.resume.userservice.auth.request;
 
 import lombok.Data;
 
@@ -9,4 +9,6 @@ public class RegisterRequest {
     private String email;
     private String password;
     private String employeeId;
+    private String orgId;
+    private String verticalId;
 }

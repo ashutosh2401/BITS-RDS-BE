@@ -1,9 +1,6 @@
 package com.resume.userservice.user.service;
 
-import com.resume.userservice.user.dto.LoginRequest;
-import com.resume.userservice.user.dto.LoginResponse;
-import com.resume.userservice.user.dto.RegisterRequest;
-import com.resume.userservice.user.dto.RegisterResponse;
+import com.resume.userservice.auth.request.RegisterRequest;
 import com.resume.userservice.user.entity.User;
 
 import java.util.List;
@@ -14,7 +11,5 @@ public interface UserService {
 
     Optional<User> findByEmail(String email);
 
-    RegisterResponse save(RegisterRequest request);
-
-    LoginResponse loginUser(LoginRequest loginRequest);
+    void save(RegisterRequest request);
 }
