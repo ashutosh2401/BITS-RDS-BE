@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void save(RegisterRequest request) {
+    public User save(RegisterRequest request) {
         request.setPassword(passwordEncoder.encode(request.getPassword()));
 
         User user = modelMapper.map(request, User.class);
@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
         user.setVertical(vertical);
         user.setRole("USER");
 
-        userRepository.save(user);
+        return userRepository.save(user);
 //        return modelMapper.map(savedUser, RegisterResponse.class);
     }
 

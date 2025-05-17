@@ -2,25 +2,28 @@ package com.resume.authservice.util;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
 public class JwtUtil {
 
-    private final String SECRET_KEY = "ea316a3458c547f7a24722dd852e83a4c3305c5424f185cc97851df927037730";
-    private final long EXPIRATION_TIME = 86400000; // 24 hours
+    @Value("${jwt.secret.key}")
+    private String secret_key;
+    private final long EXPIRATION_TIME = 3600000; // 1 hour
 
     public String generateToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .signWith(SignatureAlgorithm.HS256, secret_key)
                 .compact();
     }
 //    private SecretKey getSigningKey() {
@@ -68,4 +71,33 @@ public class JwtUtil {
 //            return false;
 //        }
 //    }
+
+
+    public String createToken(String email, List<String> roles) {
+        Claims claims = (Claims) Jwts.claims().setSubject(email);
+        claims.put("roles", roles);
+
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + EXPIRATION_TIME);
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .signWith(SignatureAlgorithm.HS256, secret_key)
+                .compact();
+    }
+
+    public String getEmail(String token) {
+        return Jwts.parser().setSigningKey(secret_key).build().parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parser().setSigningKey(secret_key).build().parseClaimsJws(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
 }

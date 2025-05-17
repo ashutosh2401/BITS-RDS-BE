@@ -1,4 +1,4 @@
-package com.resume.authservice.dto;
+package com.resume.authservice.request;
 
 import lombok.Data;
 

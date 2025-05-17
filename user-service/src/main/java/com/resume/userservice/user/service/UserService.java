@@ -11,5 +11,5 @@ public interface UserService {
 
     Optional<User> findByEmail(String email);
 
-    void save(RegisterRequest request);
+    User save(RegisterRequest request);
 }
