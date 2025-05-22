@@ -4,6 +4,7 @@ import com.resume.userservice.auth.request.RegisterRequest;
 import com.resume.userservice.organization.entity.Organization;
 import com.resume.userservice.organization.repository.OrganizationRepository;
 import com.resume.userservice.user.entity.User;
+import com.resume.userservice.user.entity.UserRole;
 import com.resume.userservice.user.repository.UserRepository;
 import com.resume.userservice.user.service.UserService;
 import com.resume.userservice.vertical.entity.Vertical;
@@ -63,27 +64,8 @@ public class UserServiceImpl implements UserService {
 
         user.setOrganization(org);
         user.setVertical(vertical);
-        user.setRole("USER");
+        user.setRole(UserRole.USER);
 
         return userRepository.save(user);
-//        return modelMapper.map(savedUser, RegisterResponse.class);
     }
-
-//    @Override
-//    public LoginResponse loginUser(LoginRequest loginRequest) {
-//        // Check if user exists
-//        User user = userRepository.findByEmail(loginRequest.getEmail())
-//                .orElseThrow(() -> new RuntimeException("User not found"));
-//
-//        // Call auth-service to get JWT token
-//        String authServiceUrl = "http://localhost:8082/api/v1/auth/generateToken";
-//
-//        return webClientBuilder.build()
-//                .post()
-//                .uri(authServiceUrl)
-//                .bodyValue(loginRequest)
-//                .retrieve()
-//                .bodyToMono(LoginResponse.class)
-//                .block(); // Blocking call (use async if needed)
-//    }
 }

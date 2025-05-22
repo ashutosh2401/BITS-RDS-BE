@@ -4,13 +4,15 @@ import com.resume.userservice.auth.request.LoginRequest;
 import com.resume.userservice.auth.request.RegisterRequest;
 import com.resume.userservice.auth.service.AuthService;
 import com.resume.userservice.auth.util.JwtUtil;
-import com.resume.userservice.user.dto.UserDto;
-import lombok.RequiredArgsConstructor;
+import com.resume.userservice.user.entity.User;
+import com.resume.userservice.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.naming.AuthenticationException;
@@ -18,7 +20,6 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-@RequiredArgsConstructor
 public class AuthController {
 
     @Autowired
@@ -26,6 +27,9 @@ public class AuthController {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
@@ -70,10 +74,14 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<?> getCurrentUser(@CookieValue(name = "jwt", required = false) String token) {
-        if (token == null || !jwtUtil.validateToken(token)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthenticated");
+    public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
+            return ResponseEntity.status(401).body("Unauthenticated");
         }
-        return ResponseEntity.ok().build();
+
+        String email = userDetails.getUsername(); // Since we used email as username in JWT
+        User user = userService.findByEmail(email).orElse(null);
+
+        return ResponseEntity.ok(user);
     }
 }

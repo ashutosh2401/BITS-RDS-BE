@@ -23,7 +23,7 @@ public class User {
     private String lastName;
     private String email;
     private String password;
-    private String role; // "USER" or "ADMIN"
+    private UserRole role;
     @DBRef
     private Organization organization; // Reference to Organization
 
