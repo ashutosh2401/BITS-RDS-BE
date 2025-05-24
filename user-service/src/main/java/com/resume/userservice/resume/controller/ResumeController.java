@@ -30,6 +30,11 @@ public class ResumeController {
         return ResponseEntity.ok(resumeService.createResume(request, email));
     }
 
+    @GetMapping
+    public ResponseEntity<?> getAllResume() {
+        return ResponseEntity.ok(resumeService.getAllResume());
+    }
+
     // Allow all authenticated users to add a version
     @PostMapping("/{resumeId}/versions")
     public ResponseEntity<Resume> addVersion(@PathVariable String resumeId,

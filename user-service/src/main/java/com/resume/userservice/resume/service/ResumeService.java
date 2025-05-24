@@ -10,6 +10,7 @@ import java.util.List;
 public interface ResumeService {
     Resume createResume(ResumeRequest dto, String email);
     Resume addResumeVersion(String resumeId, ResumeVersionRequest dto, String email);
+    List<Resume> getAllResume();
     List<ResumeVersion> getAllVersions(String resumeId);
     ResumeVersion getVersionById(String resumeId, String versionId);
     Resume activateVersion(String resumeId, String versionId);

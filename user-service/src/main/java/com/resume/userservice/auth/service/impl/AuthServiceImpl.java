@@ -41,7 +41,7 @@ public class AuthServiceImpl implements AuthService {
             throw new NoSuchElementException("Email is already registered.");
         }
         User savedUser = userService.save(request);
-        return jwtUtil.generateToken(savedUser.getEmail());
+        return jwtUtil.generateToken(savedUser.getEmail(), savedUser.getRole().toString());
     }
 
     @Override
@@ -53,12 +53,12 @@ public class AuthServiceImpl implements AuthService {
         );
         User user = userService.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + loginRequest.getEmail()));
-        return jwtUtil.generateToken(user.getEmail());
+        return jwtUtil.generateToken(user.getEmail(), user.getRole().toString());
     }
 
     @Override
     public ResponseCookie getJwtCookie(String token) {
-        return ResponseCookie.from("jwt", token)
+        return ResponseCookie.from("token", token)
                 .httpOnly(true)  // Prevent JavaScript access (XSS protection)
                 .secure(true)  // Send only over HTTPS
                 .path("/")  // Available for all routes

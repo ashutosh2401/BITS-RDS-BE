@@ -58,6 +58,11 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
+    public List<Resume> getAllResume() {
+        return resumeRepository.findAll();
+    }
+
+    @Override
     public List<ResumeVersion> getAllVersions(String resumeId) {
         Resume resume = resumeRepository.findById(resumeId)
                 .orElseThrow(() -> new RuntimeException("Resume not found"));

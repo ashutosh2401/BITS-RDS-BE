@@ -3,6 +3,7 @@ package com.resume.userservice.auth.filter;
 import com.resume.userservice.auth.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,21 +32,23 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        String authHeader = request.getHeader("Authorization");
         String token = null;
         String email = null;
 
-        // Get token from Authorization: Bearer <token>
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            token = authHeader.substring(7);
-            email = jwtUtil.extractUsername(token);
+        // Get token only from cookies
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if ("token".equals(cookie.getName())) {  // adjust cookie name as needed
+                    token = cookie.getValue();
+                    email = jwtUtil.extractUsername(token);
+                    break;
+                }
+            }
         }
 
-        // If username found and authentication is not already set
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(email); // `username` is actually email here
+            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
-            // validate with email instead of userDetails.getUsername()
             if (jwtUtil.isTokenValid(token, userDetails.getUsername())) {
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
@@ -55,7 +58,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
         }
 
-        // Continue filter chain
         filterChain.doFilter(request, response);
     }
 }
