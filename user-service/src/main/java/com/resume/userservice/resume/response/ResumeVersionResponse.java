@@ -1,24 +1,19 @@
-package com.resume.userservice.resume.entity;
+package com.resume.userservice.resume.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 import java.util.Map;
 
-@Document(collection = "resume_versions")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ResumeVersion {
-    @Id
+public class ResumeVersionResponse {
     private String id;
-    private String resumeId;
     private int versionNumber;
     private boolean isDraft;
     private boolean primary;
@@ -26,11 +21,8 @@ public class ResumeVersion {
     private String email;
     private String phone;
 
-    // Standard sections
     private List<String> skills;
     private List<String> experiences;
     private List<String> education;
-
-    // Dynamic sections: Key = Section Name, Value = List of Entries
     private Map<String, List<String>> customSections;
 }

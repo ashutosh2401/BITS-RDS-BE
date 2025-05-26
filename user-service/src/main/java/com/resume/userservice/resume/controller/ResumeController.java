@@ -5,6 +5,8 @@ import com.resume.userservice.resume.entity.Resume;
 import com.resume.userservice.resume.entity.ResumeVersion;
 import com.resume.userservice.resume.request.ResumeRequest;
 import com.resume.userservice.resume.request.ResumeVersionRequest;
+import com.resume.userservice.resume.response.ResumeResponse;
+import com.resume.userservice.resume.response.VersionCreateResponse;
 import com.resume.userservice.resume.service.ResumeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +26,8 @@ public class ResumeController {
 
     // Allow all authenticated users to create resume
     @PostMapping
-    public ResponseEntity<Resume> createResume(@RequestBody ResumeRequest request,
-                                               @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<ResumeResponse> createResume(@RequestBody ResumeRequest request,
+                                                       @AuthenticationPrincipal UserDetails userDetails) {
         String email = userDetails.getUsername();
         return ResponseEntity.ok(resumeService.createResume(request, email));
     }
@@ -37,15 +39,14 @@ public class ResumeController {
 
     // Allow all authenticated users to add a version
     @PostMapping("/{resumeId}/versions")
-    public ResponseEntity<Resume> addVersion(@PathVariable String resumeId,
-                                             @RequestBody ResumeVersionRequest resumeVersionRequest,
-                                             @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<VersionCreateResponse> addVersion(@PathVariable String resumeId,
+                                                            @RequestBody ResumeVersionRequest resumeVersionRequest,
+                                                            @AuthenticationPrincipal UserDetails userDetails) {
         String email = userDetails.getUsername();
         return ResponseEntity.ok(resumeService.addResumeVersion(resumeId, resumeVersionRequest, email));
     }
 
     // Only ADMIN can view all versions
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{resumeId}/versions")
     public ResponseEntity<List<ResumeVersion>> getAllVersions(@PathVariable String resumeId) {
         return ResponseEntity.ok(resumeService.getAllVersions(resumeId));
@@ -53,7 +54,7 @@ public class ResumeController {
 
     // Allow all authenticated users to get a specific version
     @GetMapping("/{resumeId}/versions/{versionId}")
-    public ResponseEntity<ResumeVersion> getVersion(@PathVariable String resumeId,
+    public ResponseEntity<ResumeResponse> getVersion(@PathVariable String resumeId,
                                                     @PathVariable String versionId,
                                                     @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(resumeService.getVersionById(resumeId, versionId));
@@ -62,8 +63,9 @@ public class ResumeController {
     // Only ADMIN can activate a version
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{resumeId}/versions/{versionId}/activate")
-    public ResponseEntity<Resume> activateVersion(@PathVariable String resumeId,
+    public ResponseEntity<?> activateVersion(@PathVariable String resumeId,
                                                   @PathVariable String versionId) {
-        return ResponseEntity.ok(resumeService.activateVersion(resumeId, versionId));
+        resumeService.activateVersion(resumeId, versionId);
+        return ResponseEntity.ok("Version activated");
     }
 }
