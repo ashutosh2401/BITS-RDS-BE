@@ -1,5 +1,6 @@
 package com.resume.userservice.resume.controller;
 
+import com.resume.userservice.resume.entity.Resume;
 import com.resume.userservice.resume.entity.ResumeVersion;
 import com.resume.userservice.resume.request.ResumeRequest;
 import com.resume.userservice.resume.request.ResumeVersionRequest;
@@ -10,6 +11,7 @@ import com.resume.userservice.resume.response.VersionUpdateResponse;
 import com.resume.userservice.resume.service.ResumeService;
 import com.resume.userservice.user.entity.User;
 import com.resume.userservice.user.service.UserService;
+import com.resume.userservice.vertical.response.VerticalResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -38,7 +40,7 @@ public class ResumeController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllResume(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<List<Resume>> getAllResume(@AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails == null) {
             return ResponseEntity.status(401).build();
         }
@@ -88,6 +90,12 @@ public class ResumeController {
         }
         return ResponseEntity.badRequest()
                 .body(new VersionUpdateResponse("Error occurred while saving resume version"));
+    }
+
+    @GetMapping("/preview/{versionId}")
+    public ResponseEntity<ResumeVersionResponse> getVersion(@PathVariable String versionId,
+                                                            @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(resumeService.getVersionById(versionId));
     }
 
     // Only ADMIN can activate a version

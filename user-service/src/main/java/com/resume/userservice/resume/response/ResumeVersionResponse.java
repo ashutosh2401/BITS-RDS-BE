@@ -1,5 +1,7 @@
 package com.resume.userservice.resume.response;
 
+import com.resume.userservice.resume.dto.Education;
+import com.resume.userservice.resume.dto.Experience;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +24,7 @@ public class ResumeVersionResponse {
     private String phone;
 
     private List<String> skills;
-    private List<String> experiences;
-    private List<String> education;
+    private List<Experience> experiences;
+    private List<Education> education;
     private Map<String, List<String>> customSections;
 }

@@ -1,6 +1,7 @@
 package com.resume.userservice.resume.repository;
 
 import com.resume.userservice.resume.entity.Resume;
+import com.resume.userservice.vertical.response.VerticalResponse;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

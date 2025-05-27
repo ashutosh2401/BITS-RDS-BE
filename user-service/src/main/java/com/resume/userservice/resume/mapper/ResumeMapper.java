@@ -2,8 +2,11 @@ package com.resume.userservice.resume.mapper;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.resume.userservice.resume.dto.Education;
+import com.resume.userservice.resume.dto.Experience;
 import com.resume.userservice.resume.entity.Resume;
 import com.resume.userservice.resume.entity.ResumeVersion;
+import com.resume.userservice.resume.request.ExperienceRequest;
 import com.resume.userservice.resume.response.ResumeResponse;
 import com.resume.userservice.resume.response.ResumeVersionResponse;
 
@@ -23,14 +26,13 @@ public class ResumeMapper {
     public static ResumeVersionResponse mapToResumeVersionResponse(ResumeVersion version) {
         ObjectMapper mapper = new ObjectMapper();
 
-        List<String> experiencesList = null;
-        List<String> educationList = null;
+        List<Experience> experiencesList;
+        List<Education> educationList;
 
         try {
-            experiencesList = mapper.readValue(version.getExperiences(), new TypeReference<List<String>>() {});
-            educationList = mapper.readValue(version.getEducation(), new TypeReference<List<String>>() {});
+            experiencesList = mapper.readValue(version.getExperiences(), new TypeReference<List<Experience>>() {});
+            educationList = mapper.readValue(version.getEducation(), new TypeReference<List<Education>>() {});
         } catch (Exception e) {
-            // handle exception or assign empty lists
             experiencesList = List.of();
             educationList = List.of();
         }

@@ -8,6 +8,7 @@ import com.resume.userservice.resume.response.ResumeResponse;
 import com.resume.userservice.resume.response.ResumeVersionResponse;
 import com.resume.userservice.resume.response.VersionCreateResponse;
 import com.resume.userservice.user.entity.User;
+import com.resume.userservice.vertical.response.VerticalResponse;
 
 import java.util.List;
 

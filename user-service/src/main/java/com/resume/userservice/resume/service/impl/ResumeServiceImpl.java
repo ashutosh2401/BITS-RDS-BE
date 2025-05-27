@@ -14,6 +14,7 @@ import com.resume.userservice.resume.response.ResumeVersionResponse;
 import com.resume.userservice.resume.response.VersionCreateResponse;
 import com.resume.userservice.resume.service.ResumeService;
 import com.resume.userservice.user.entity.User;
+import com.resume.userservice.vertical.response.VerticalResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +48,8 @@ public class ResumeServiceImpl implements ResumeService {
                 .build();
 
         ResumeVersion savedVersion = resumeVersionRepository.save(initialVersion);
+        savedResume.setLatestVersionId(savedVersion.getId());
+        resumeRepository.save(savedResume);
         return ResumeMapper.mapToResumeResponse(savedResume);
     }
 
