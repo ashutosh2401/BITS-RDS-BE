@@ -2,11 +2,16 @@ package com.resume.userservice.notification.consumer;
 
 import com.resume.userservice.config.RabbitMQConfig;
 import com.resume.userservice.notification.dto.NotificationMessage;
+import com.resume.userservice.notification.service.EmailSender;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class NotificationConsumer {
+
+    @Autowired
+    private EmailSender emailSender;
 
     @RabbitListener(queues = RabbitMQConfig.QUEUE)
     public void receiveNotification(NotificationMessage message) {
@@ -15,6 +20,6 @@ public class NotificationConsumer {
         System.out.println("Subject: " + message.getSubject());
         System.out.println("Body: " + message.getBody());
 
-        // Logic to send email or push notification can go here
+        emailSender.sendHtmlEmail(message.getRecipientEmail(), message.getSubject(), message.getBody());
     }
 }

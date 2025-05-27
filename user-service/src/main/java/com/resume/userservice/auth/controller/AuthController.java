@@ -1,7 +1,9 @@
 package com.resume.userservice.auth.controller;
 
+import com.resume.userservice.auth.mapper.AuthUserMapper;
 import com.resume.userservice.auth.request.LoginRequest;
 import com.resume.userservice.auth.request.RegisterRequest;
+import com.resume.userservice.auth.response.AuthUserResponse;
 import com.resume.userservice.auth.service.AuthService;
 import com.resume.userservice.auth.util.JwtUtil;
 import com.resume.userservice.user.entity.User;
@@ -74,14 +76,18 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<AuthUserResponse> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails == null) {
-            return ResponseEntity.status(401).body("Unauthenticated");
+            return ResponseEntity.status(401).build();
         }
 
-        String email = userDetails.getUsername(); // Since we used email as username in JWT
+        String email = userDetails.getUsername();
         User user = userService.findByEmail(email).orElse(null);
 
-        return ResponseEntity.ok(user);
+        if (user == null) {
+            return ResponseEntity.status(404).build();
+        }
+
+        return ResponseEntity.ok(AuthUserMapper.toAuthUserResponse(user));
     }
 }

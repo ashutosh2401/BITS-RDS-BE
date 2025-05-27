@@ -1,5 +1,6 @@
 package com.resume.userservice.organization.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.resume.userservice.vertical.entity.Vertical;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,6 +23,7 @@ public class Organization {
     private String name;
 
     @DBRef
+    @JsonIgnore
     private List<Vertical> verticals;
 
 }

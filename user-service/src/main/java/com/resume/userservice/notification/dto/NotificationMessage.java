@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class NotificationMessage {
+    private String versionId;
     private String recipientEmail;
     private String subject;
     private String body;

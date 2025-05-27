@@ -28,8 +28,8 @@ public class ResumeVersion {
 
     // Standard sections
     private List<String> skills;
-    private List<String> experiences;
-    private List<String> education;
+    private String experiences;
+    private String education;
 
     // Dynamic sections: Key = Section Name, Value = List of Entries
     private Map<String, List<String>> customSections;

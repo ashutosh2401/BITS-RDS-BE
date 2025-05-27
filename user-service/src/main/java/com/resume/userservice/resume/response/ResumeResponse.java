@@ -16,6 +16,4 @@ public class ResumeResponse {
     private String companyId;
     private String verticalId;
     private String title;
-
-    private ResumeVersionResponse primaryVersion;
 }

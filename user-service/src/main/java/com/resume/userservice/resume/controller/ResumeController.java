@@ -1,13 +1,15 @@
 package com.resume.userservice.resume.controller;
 
-
-import com.resume.userservice.resume.entity.Resume;
 import com.resume.userservice.resume.entity.ResumeVersion;
 import com.resume.userservice.resume.request.ResumeRequest;
 import com.resume.userservice.resume.request.ResumeVersionRequest;
 import com.resume.userservice.resume.response.ResumeResponse;
+import com.resume.userservice.resume.response.ResumeVersionResponse;
 import com.resume.userservice.resume.response.VersionCreateResponse;
+import com.resume.userservice.resume.response.VersionUpdateResponse;
 import com.resume.userservice.resume.service.ResumeService;
+import com.resume.userservice.user.entity.User;
+import com.resume.userservice.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,6 +26,9 @@ public class ResumeController {
     @Autowired
     private ResumeService resumeService;
 
+    @Autowired
+    private UserService userService;
+
     // Allow all authenticated users to create resume
     @PostMapping
     public ResponseEntity<ResumeResponse> createResume(@RequestBody ResumeRequest request,
@@ -33,8 +38,18 @@ public class ResumeController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllResume() {
-        return ResponseEntity.ok(resumeService.getAllResume());
+    public ResponseEntity<?> getAllResume(@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
+            return ResponseEntity.status(401).build();
+        }
+        String email = userDetails.getUsername();
+        User user = userService.findByEmail(email).orElse(null);
+        return ResponseEntity.ok(resumeService.getAllResume(user));
+    }
+
+    @GetMapping("/{resumeId}")
+    public ResponseEntity<ResumeResponse> getResumeById(@PathVariable String resumeId) {
+        return ResponseEntity.ok(resumeService.getResumeById(resumeId));
     }
 
     // Allow all authenticated users to add a version
@@ -54,10 +69,25 @@ public class ResumeController {
 
     // Allow all authenticated users to get a specific version
     @GetMapping("/{resumeId}/versions/{versionId}")
-    public ResponseEntity<ResumeResponse> getVersion(@PathVariable String resumeId,
-                                                    @PathVariable String versionId,
-                                                    @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(resumeService.getVersionById(resumeId, versionId));
+    public ResponseEntity<ResumeVersionResponse> getVersion(@PathVariable String resumeId,
+                                                            @PathVariable String versionId,
+                                                            @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(resumeService.getVersionById(versionId));
+    }
+
+    @PutMapping("/{resumeId}/versions/{versionId}")
+    public ResponseEntity<VersionUpdateResponse> updateVersion(@PathVariable String resumeId,
+                                                     @PathVariable String versionId,
+                                                     @RequestBody ResumeVersionRequest versionRequest,
+                                                     @AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            resumeService.updateResumeVersion(versionId, versionRequest);
+            return ResponseEntity.ok(new VersionUpdateResponse("Version saved Successfully"));
+        } catch (Exception e) {
+            System.out.println("Error occurred while saving resume version");
+        }
+        return ResponseEntity.badRequest()
+                .body(new VersionUpdateResponse("Error occurred while saving resume version"));
     }
 
     // Only ADMIN can activate a version

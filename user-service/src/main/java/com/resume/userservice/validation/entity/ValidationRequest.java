@@ -1,4 +1,4 @@
-package com.resume.userservice.resume.entity;
+package com.resume.userservice.validation.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,19 +7,17 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
-
-@Document(collection = "resumes")
+@Document(collection = "validation_requests")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Resume {
+public class ValidationRequest {
     @Id
     private String id;
-    private String employeeId;
-    private String companyId;
-    private String verticalId;
-    private String title;
-    private String latestVersionId;
+    private String resumeId;
+    private String versionId;
+    private boolean accepted;
+    private String requesterUserId;
+    private String acceptorUserId;
 }

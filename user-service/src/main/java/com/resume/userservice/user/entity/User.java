@@ -1,5 +1,6 @@
 package com.resume.userservice.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.resume.userservice.organization.entity.Organization;
 import com.resume.userservice.vertical.entity.Vertical;
 import lombok.AllArgsConstructor;
@@ -24,9 +25,12 @@ public class User {
     private String email;
     private String password;
     private UserRole role;
-    @DBRef
-    private Organization organization; // Reference to Organization
 
     @DBRef
-    private Vertical vertical; // Reference to Vertical
+    @JsonIgnore
+    private Organization organization;
+
+    @DBRef
+    @JsonIgnore
+    private Vertical vertical;
 }

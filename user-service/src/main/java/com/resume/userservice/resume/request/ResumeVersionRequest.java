@@ -7,12 +7,12 @@ import java.util.Map;
 
 @Data
 public class ResumeVersionRequest {
-    private boolean isDraft;
+    private boolean draft;
     private String name;
     private String email;
     private String phone;
     private List<String> skills;
-    private List<String> experiences;
-    private List<String> education;
+    private List<ExperienceRequest> experiences;
+    private List<EducationRequest> education;
     private Map<String, List<String>> customSections;
 }
